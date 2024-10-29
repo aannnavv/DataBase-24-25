@@ -1,0 +1,115 @@
+import time
+# 1. Функція для читання даних студентів із файлу
+def read_students_data(filename):
+students = []
+try:
+with open(filename, 'r') as file:
+for line in file:
+# Розбивка кожного рядка на окремі поля
+data = line.strip().split(',')
+if len(data) == 5: # Перевірка на достатню кількість полів
+student = {
+'StLastName': data[0].strip(),
+'StFirstName': data[1].strip(),
+'Grade': data[2].strip(),
+'Classroom': data[3].strip(),
+'Bus': data[4].strip()
+}
+students.append(student)
+else:
+print(f"Пропущено рядок через недостатню кількість полів:
+{line.strip()}")
+except FileNotFoundError:
+print(f"Файл {filename} не знайдено.")
+return students
+# 2. Пошук за прізвищем студента
+def search_by_student_lastname(students, lastname):
+result = [student for student in students if student['StLastName'].lower() ==
+lastname.lower()]
+return result
+# 3. Пошук за номером автобуса
+def search_by_bus_number(students, bus_number):
+result = [student for student in students if student['Bus'] == str(bus_number)]
+return result
+# 4. Пошук за прізвищем викладача
+def search_by_teacher_lastname(teachers, teacher_lastname):
+result = [teacher for teacher in teachers if teacher['TLastName'].lower() ==
+teacher_lastname.lower()]
+return result
+# 5. Пошук за рівнем навчання
+def search_by_grade(students, grade):
+result = [student for student in students if student['Grade'] == str(grade)]
+return result
+# Основна функція
+def main():
+# Зчитування даних з двох файлів
+students_file = 'C:/Users/user/PycharmProjects/lr2/list.txt'
+teachers_file = 'C:/Users/user/PycharmProjects/lr2/teachers.txt'
+students = read_students_data(students_file)
+teachers = read_students_data(teachers_file) # Якщо структура аналогічна
+if not students:
+print("Дані про студентів не завантажено.")
+return
+while True:
+command = input(
+"Введіть команду (S - пошук за прізвищем студента, B - пошук за автобусом,
+T - пошук за викладачем, G - пошук за рівнем навчання, Q - вийти): ").strip().upper()
+if command == 'Q':
+print("Вихід із програми.")
+break
+elif command == 'S':
+lastname = input("Введіть прізвище студента для пошуку: ")
+start_time = time.time() # Початок вимірювання часу
+result = search_by_student_lastname(students, lastname)
+end_time = time.time() # Кінець вимірювання часу
+execution_time = end_time - start_time # Час виконання запиту
+if result:
+print("Результат пошуку за прізвищем студента:")
+for student in result:
+print(student)
+else:
+print(f"Студент із прізвищем {lastname} не знайдений.")
+print(f"Час виконання запиту: {execution_time:.6f} секунд")
+elif command == 'B':
+bus_number = input("Введіть номер автобуса для пошуку: ")
+start_time = time.time() # Початок вимірювання часу
+result = search_by_bus_number(students, bus_number)
+end_time = time.time() # Кінець вимірювання часу
+execution_time = end_time - start_time # Час виконання запиту
+if result:
+print(f"Результат пошуку за автобусом {bus_number}:")
+for student in result:
+print(student)
+else:
+print(f"Студенти, що користуються автобусом {bus_number}, не знайдені.")
+print(f"Час виконання запиту: {execution_time:.6f} секунд")
+elif command == 'T':
+teacher_lastname = input("Введіть прізвище викладача для пошуку: ")
+start_time = time.time() # Початок вимірювання часу
+result = search_by_teacher_lastname(teachers, teacher_lastname)
+end_time = time.time() # Кінець вимірювання часу
+execution_time = end_time - start_time # Час виконання запиту
+if result:
+print(f"Результат пошуку за прізвищем викладача {teacher_lastname}:")
+for teacher in result:
+print(teacher)
+else:
+print(f"Студенти з викладачем {teacher_lastname} не знайдені.")
+print(f"Час виконання запиту: {execution_time:.6f} секунд")
+elif command == 'G':
+grade = input("Введіть рівень навчання (Grade) для пошуку: ")
+start_time = time.time() # Початок вимірювання часу
+result = search_by_grade(students, grade)
+end_time = time.time() # Кінець вимірювання часу
+execution_time = end_time - start_time # Час виконання запиту
+if result:
+print(f"Результат пошуку за рівнем навчання {grade}:")
+for student in result:
+print(student)
+else:
+print(f"Студенти рівня навчання {grade} не знайдені.")
+print(f"Час виконання запиту: {execution_time:.6f} секунд")
+else:
+print("Невідома команда, спробуйте ще раз.")
+if __name__ == "__main__":
+main()
